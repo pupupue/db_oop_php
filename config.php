@@ -4,6 +4,6 @@ $conf = (object) [
         'host' => 'localhost',
         'username' => 'root',
         'password' => '',
-        'database' => 'scandi'
+        'database' => '123scandi321'
     ]
 ];

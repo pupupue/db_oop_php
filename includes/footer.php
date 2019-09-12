@@ -9,13 +9,13 @@
         <div class='col-md-3'>
         </div>
         <div class='col-md-2'>
-            <a href="list.php">LIST</a>
+            <a href="list.php" class="btn btn-danger">LIST</a>
         </div>
         <div class='col-md-2'>
-            <a href="new.php">ADD</a>
+            <a href="new.php" class="btn btn-danger">ADD</a>
         </div>
         <div class='col-md-2'>
-            <a href="../php/resetdb.php">RESET DB</a>
+            <a href="resetdb.php" class="btn btn-danger" >RESET DB</a>
         </div>
         <div class='col-md-3'>
         </div>

@@ -2,7 +2,6 @@
 include "db.php";
 include "type.php";
 
-// 'product' object
 
 class Product extends Database
 {
@@ -37,7 +36,6 @@ class Product extends Database
             $item_name = mysqli_real_escape_string($conn, $item_name);
             $item_price = mysqli_real_escape_string($conn, $item_price);
             $item_type = mysqli_real_escape_string($conn, $item_type);
-
             
             $sql = "INSERT INTO items(sku, item_name, item_price, item_type) VALUES
             ('$sku', '$item_name', '$item_price', '$item_type')";
@@ -49,7 +47,6 @@ class Product extends Database
             //setting parameter id for next part
             $sql = "SELECT id FROM items WHERE sku='$sku'";
             $result = mysqli_query($conn, $sql);
-            //error checking
             if(!$result) {
                 die('query die '.mysqli_error($conn));
             }
@@ -57,22 +54,17 @@ class Product extends Database
                 //setting item_id
                 $item_id = $row['id'];
             }
-            /*  */
             foreach ($type->getType($item_type) as $k => $v) {
-                //echo $v;
                 $v_value = $_POST[$v];
                 $sql = "SELECT id FROM item_attributes WHERE name='$v'";
                 $result = mysqli_query($conn, $sql);
-                //checking if result worked
                 if(!$result) {
                     die('query die '.mysqli_error($conn));
                 }
                 while ($row = mysqli_fetch_assoc($result)) {
                     $i_a_id = $row['id'];
                 }
-                //sanitize
                 $v_value = mysqli_real_escape_string($conn, $v_value);
-                //
                 $sql = "INSERT INTO item_attribute_values(item_id, attribute_id, attribute_value) VALUES
                 ('$item_id', '$i_a_id', '$v_value')";
                 $result = mysqli_query($conn, $sql);
@@ -80,11 +72,10 @@ class Product extends Database
                     die('query die '.mysqli_error($conn));
                 }  
             }
-    /*  */
         }//isset
     }
 
-        /* delete method for list page */
+    /* delete method for list page */
     public function deleteProducts()
     {
         $conn = $this->conn;
@@ -93,20 +84,17 @@ class Product extends Database
             foreach ($_POST['delete'] as $key => $id) {
                 $sql = "DELETE FROM items WHERE id='$id'";
                 $itemResult = mysqli_query($conn, $sql);
-                //checking if result worked
                 if(!$itemResult) {
                     die('query die '.mysqli_error($conn));
                 }
-                //
                 $sql = "DELETE FROM item_attribute_values WHERE item_id='$id'";
                 $i_a_vResult = mysqli_query($conn, $sql);
-                //checking if result worked
                 if(!$i_a_vResult) {
                     die('query die '.mysqli_error($conn));
                 }
             }
             /* this breaks if php tag at the start has something infront of it */
-            header("Location: list.php?s=success");
+            header("Location: list.php?msg=success");
         }//isset
     }// end of func deleteProducts
     
@@ -136,7 +124,6 @@ class Product extends Database
     {
         $conn = $this->conn;
         
-            
             $item_id = $row['id'];
             $this->item_id = $row['id'];
             $item_sku = $row['sku'];
@@ -169,9 +156,6 @@ class Product extends Database
                 while ($row = mysqli_fetch_assoc($result_name)) {
                     /* HERE attribute_name is added to $set (assoc_array) */
                     $set[$i]['attribute_name'] = $row['name'];
-                    //echo $set[$i]['attribute_name']. " and ".$set[$i]['attribute_value']."<br>";
-                    //echo $item_price." and ".$attribute_name." and ". $attribute_value."<br>"; 
-                    //echo '<h5><b>'.$attribute_name.'</b>: '.$attribute_value.'</h5>';
                 }
             }
 
@@ -191,47 +175,5 @@ class Product extends Database
             
         }
     }
-    //
-
 
 }
-
-
-
-
-
-/* method that adds attrubutes depending on the selected options */
-/* was used seperatly from addNewProduct */
-/*     public function addAttributes()
-    {
-        global $conn;
-        if (isset($_POST['submit'])) {
-            
-            $type = new Type();
-            $select = $_POST['myselect'];
-            foreach ($type->getType($select) as $k => $v) {
-                //echo $v;
-                $v_value = $_POST[$v];
-                $sql = "SELECT id FROM item_attributes WHERE name='$v'";
-                $result = mysqli_query($conn, $sql);
-                //checking if result worked
-                if(!$result) {
-                    die('query die '.mysqli_error($conn));
-                }
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $i_a_id = $row['id'];
-                }
-                //sanitize
-                $v_value = mysqli_real_escape_string($conn, $v_value);
-                //
-                $sql = "INSERT INTO item_attribute_values(item_id, attribute_id, attribute_value) VALUES
-                ('$this->item_id', '$i_a_id', '$v_value')";
-                $result = mysqli_query($conn, $sql);
-                if(!$result) {
-                    die('query die '.mysqli_error($conn));
-                }  
-            }
-
-
-        }//isset
-    }// end of func addAttributes */

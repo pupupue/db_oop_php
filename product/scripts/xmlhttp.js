@@ -1,4 +1,3 @@
-<script>
 function getType(str) 
 {
     /* this is the dream solution */
@@ -20,4 +19,3 @@ function getType(str)
         xmlhttp.send();
     }
 }
-</script>

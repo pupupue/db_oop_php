@@ -18,7 +18,8 @@ $item->deleteProducts();
     <meta name="viewport" content="width=device-width, initial-scale=1">
  
     <title>LIST</title>
- 
+    <!-- scripts -->
+    <script type='text/javascript' src='scripts/selectall.js'></script>
     <!-- Bootstrap? -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
  
@@ -29,15 +30,7 @@ $item->deleteProducts();
 <body>
 
 
-<script>
-/* scirpt toggles all checkboxes created with showAll() */
-function selectall(source) {
-  checkboxes = document.getElementsByName('delete[]');
-  for(var i=0, n=checkboxes.length;i<n;i++) {
-    checkboxes[i].checked = source.checked;
-  }
-}
-</script>
+
 
  
     <!-- container -->
@@ -49,6 +42,16 @@ function selectall(source) {
                     <div class="page-header">
                         <div class='col-md-4'>
                             <h1>Product LIST</h1>
+                            <h4>
+                            <?php 
+                            if(isset($_GET['msg'])){
+                                if ($_GET['msg']=='success') {
+                                    echo "Item/s deleted successfully!";
+                                }
+                            }
+                            ?>
+                            </h4>
+                            
                         </div>
                         <div class='col-md-8'>
                             <input type="submit" name="submit"  value="DELETE" class="btn btn-danger right-side">
@@ -94,7 +97,6 @@ function selectall(source) {
                                     </div>
                                     <div class="price col-md-2">
                                         <input class="form-check-input" type="checkbox" name="delete[]" value="<?php echo $item->item_id ?>">
-                                        <p></p>
                                     </div>
                                     </div><!-- row -->
                                     <div class="separator clear-left"></div>
@@ -115,6 +117,6 @@ function selectall(source) {
         </form>
     </div>         
     <!-- /container -->
-    <?php include "footer.php"; ?>
+    <?php include "../includes/footer.php"; ?>
 </body>
 </html>

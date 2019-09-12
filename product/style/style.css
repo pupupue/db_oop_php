@@ -1,4 +1,8 @@
 @import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
+html, body {
+    height: 100%;
+    margin: 0;
+  }
 .col-item
 {
     border: 1px solid #E1E1E1;
@@ -120,3 +124,14 @@ Hover the image
     margin-right: 10px !important;
     margin-top: 33px !important;
 }
+.wrapper {
+    min-height: 100%;
+  
+    /* Equal to height of footer */
+    /* But also accounting for potential margin-bottom of last child */
+    margin-bottom: -50px;
+  }
+  .footer,
+  .push {
+    height: 50px;
+  }
