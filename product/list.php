@@ -1,12 +1,12 @@
 <?php 
-include "../php/product.php";
-include "../php/show.php";
-include "../config.php";
+include "../php/init.php";
+$page_title = "LIST";
+$msg = "";
+$obj = new Item();
+$msg = $obj->deleteProducts();
+$items = Item::findAll();
 
-$item = new Product($conf->db);
-$item->deleteProducts();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,10 +28,6 @@ $item->deleteProducts();
  
 </head>
 <body>
-
-
-
-
  
     <!-- container -->
     <div class="container">
@@ -40,24 +36,22 @@ $item->deleteProducts();
             <form action="list.php" method="post">
                 <div class="col-md-12">
                     <div class="page-header">
-                        <div class='col-md-4'>
+                        <div class='col-md-6'>
                             <h1>Product LIST</h1>
                             <h4>
                             <?php 
-                            if(isset($_GET['msg'])){
-                                if ($_GET['msg']=='success') {
-                                    echo "Item/s deleted successfully!";
-                                }
+                            if ($msg === 'success') {
+                                echo "Item/s deleted successfully!";
                             }
                             ?>
                             </h4>
                             
                         </div>
-                        <div class='col-md-8'>
+                        <div class='col-md-12'>
                             <input type="submit" name="submit"  value="DELETE" class="btn btn-danger right-side">
                             <label for="select-all" class="right-side-label">Check All</label>
                             <input class="form-check-input right-side-checkbox" id="select-all" name="select-all" type="checkbox" onClick="selectall(this)">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -69,35 +63,33 @@ $item->deleteProducts();
                         <div class='col-md-12'>
                             <!-- Displaying every item here -->
                             <?php 
-                                $result = $item->getItems(); 
                                 $variable = 0;
-                                while ($row = mysqli_fetch_assoc($result)) {
+                                foreach ($items as $item):
                                     $variable++;
-                                    $set = $item->showAll($row);
                             ?>
                             <div class="col-12 col-sm-6 col-md-3">
                                 <div class="col-item">
                                 <div class="photo">
                                 <img src="http://placehold.it/350x260" class="img-responsive" alt="a" />
-                                </div>
+                                </div><!-- end of div photo -->
                                 <div class="info">
                                     <div class="row">
-                                    <div class="price col-md-7">
-                                    <h5><b><?php echo $item->item_name ?></b></h5>
-                                    </div>
-                                    <div class="price col-md-5">
-                                    <h5><?php echo $item->item_sku ?></h5>
-                                    </div>
+                                        <div class="price col-md-7">
+                                            <h5><b><?php echo $item->item_name ?></b></h5>
+                                        </div>
+                                        <div class="price col-md-5">
+                                            <h5><?php echo $item->sku ?></h5>
+                                        </div>
                                     <div class="separator clear-left"></div>
-                                    <div class="price col-md-12">
-                                    <?php $item->showTypeAttributes($set, $conf->db) ?>
-                                    </div>
-                                    <div class="price col-md-10">
-                                        <h5 class="price-text-color">€ <?php echo $item->item_price ?></h5>
-                                    </div>
-                                    <div class="price col-md-2">
-                                        <input class="form-check-input" type="checkbox" name="delete[]" value="<?php echo $item->item_id ?>">
-                                    </div>
+                                        <div class="price col-md-12">
+                                            <?php $item->showItemDetails(); ?>
+                                        </div>
+                                        <div class="price col-md-10">
+                                            <h5 class="price-text-color">€ <?php echo $item->item_price ?></h5>
+                                        </div>
+                                        <div class="price col-md-2">
+                                            <input class="form-check-input" type="checkbox" name="delete[]" value="<?php echo $item->id ?>">
+                                        </div>
                                     </div><!-- row -->
                                     <div class="separator clear-left"></div>
                                     <div class="clearfix"></div>
@@ -109,14 +101,17 @@ $item->deleteProducts();
                             if ($variable%4==0) {
                                 echo '<div class="clearfix hidden-sm-up"></div>';
                             }
-                        }/* end of while() */
+                            endforeach;  
                          ?>
                     </div>
                 </div>
             </div>
         </form>
-    </div>         
+    </div>
+</div>  
+     
     <!-- /container -->
-    <?php include "../includes/footer.php"; ?>
+    
 </body>
+<?php include "../includes/footer.php"; ?>
 </html>

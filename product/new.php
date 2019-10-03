@@ -1,33 +1,33 @@
 <?php 
-include "../php/product.php";
-include "../php/show.php";
-include "../config.php";
+include_once "../php/init.php";
+$page_title = "NEW";
+$obj = new Item();
+$break = 1;
+$msg = "";
+$errors = array();
+$item = new Item();
 
-$item = new Product($conf->db);
-$item->addNewProduct();
-
-//echo var_dump($item->item_id) . "<br>";
-
+if (isset($_POST['submit'])) {
+    //ya
+    $errors = $item->getAndTestItemFields();
+    if($item->passed()){
+        $class = $item->item_type;
+        $item = new $class();
+        $errors = $item->getAndTestAttributeFields();
+        if($item->passed()){
+            //var_dump($errors);
+            $item->save();
+            //unset($item);
+            $msg = 'success';
+        }
+    }
+}
 ?>
+<?php include "../includes/header.php"; ?>
+<!-- script in new-->
+<script type='text/javascript' src='scripts/xmlhttp.js'></script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
- 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- 
-    <title>ADD</title>
-    <!-- script -->
-    <script type='text/javascript' src='scripts/xmlhttp.js'></script>
-    <!-- Bootstrap? -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- custom css -->
-    <link href="style/style.css" rel="stylesheet" media="screen">
- 
-</head>
-<body>
+
  
 
 <div class="wrapper">
@@ -38,28 +38,44 @@ $item->addNewProduct();
             <div class="page-header">
                 <h1>Product Add</h1>
             </div>
-        </div>
+            <?php 
+            if ($msg === 'success') {
+                echo "Item saved successfully!";
+            }
+            ?>
+        </div>        
+        <?php foreach ($errors as $error) {             
+                if ($break>1) { 
+                    break;
+                } ?>
+                <div class='col-md-12 alert alert-warning'>
+                <?php 
+                echo $error; 
+                $break++;
+                ?>
+            </div>
+        <?php } ?>
         
-            <form action="" method="post">
+            <form action="new.php" method="post">
                 <div class='col-md-12'>
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
-                            <input type="text" name="sku" class="form-control" placeholder="SKU">
+                            <input type="text" name="sku" class="form-control" placeholder="SKU" value='<?php echo $item->sku?>'>
                         </div>  
                         <div class="col-md-4 mb-3">
-                            <input type="text" name="item_name" class="form-control" placeholder="Name">
+                            <input type="text" name="item_name" class="form-control" placeholder="Name" value='<?php echo $item->item_name?>'>
                         </div>  
                         <div class="col-md-2 mb-3">
-                            <input type="text" name="item_price" class="form-control" placeholder="Price">
+                            <input type="text" name="item_price" class="form-control" placeholder="Price"  value='<?php echo $item->item_price?>'>
+                            <label for="item_price" class="">Use [99.99] format</label>
                         </div>
                         <div class="col-md-2 mb-3">
                             <input type="submit" name="submit"  value="ADD" class="btn btn-primary form-inline">
                         </div>
                         <div class="col-md-8 mb-3">
-                            <select name='myselect' class="custom-select mr-sm-2" onchange="getType(this.value)">
+                            <select name='item_type' class="custom-select mr-sm-2" onchange="getType(this.value)">
                             <?php 
-                                $optionsType = new Type();
-                                $optionsType->listTypes();
+                                echo $obj->listTypes();
                             ?>
                             </select>
                         </div>
@@ -81,7 +97,7 @@ $item->addNewProduct();
 </div>
         <!-- /row -->
         
-    </div>
+
     <!-- /container -->
     <?php include "../includes/footer.php"; ?>
     

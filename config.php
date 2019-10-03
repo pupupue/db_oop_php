@@ -1,9 +1,6 @@
 <?php
-$conf = (object) [
-    'db' => (object) [
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'database' => '123scandi321'
-    ]
-];
+// DB CONNECTION CONSTANTS
+define("DB_HOST","localhost");
+define("DB_USER","root");
+define("DB_PASS","");
+define("DB_NAME","123scandi321");

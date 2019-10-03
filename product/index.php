@@ -1,3 +1,3 @@
 <?php 
-header("Location: resetdb.php")
+//header("Location: resetdb.php")
 ?>

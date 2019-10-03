@@ -1,9 +1,7 @@
 function getType(str) 
 {
-    /* this is the dream solution */
     /* get request to a different page without reloading */
     /* returns input fields and the hint */
-    /* i actually teared up when it worked allegedly */
     if (str.length == 0) {
         document.getElementById("dynamic").innerHTML = "";
         return;
@@ -15,7 +13,7 @@ function getType(str)
                 document.getElementById("dynamic").innerHTML = this.responseText;
             }
         };
-        xmlhttp.open("GET", "gettype.php?key=" + str, true);
+        xmlhttp.open("GET", "../php/gettype.php?key=" + str, true);
         xmlhttp.send();
     }
 }

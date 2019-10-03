@@ -1,9 +1,5 @@
-## Php tests Janis A Laurins
+## Php test Janis A Laurins
+Created on Windows enviroment using WAMP
 
-Veidots, izmantojot wamp uz windows vides.
-
-- Lai palaistu, atver root directory un datubāze
-- '123scandi321' automatiski uztaisīsies.(config.php & resetdb.php)
-- resetdb.php ir aizvietojums .sql failam
-- Es zinu, ka nebija 'time limits',
-- es būtu iesūtījis ātrāk, bet diemžēl es saslimu kādām 10 dienām :/
+- use .sql file to set up DB
+- you can change db in config.php
