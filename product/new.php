@@ -26,12 +26,6 @@ if (isset($_POST['submit'])) {
 <?php include "../includes/header.php"; ?>
 <!-- script in new-->
 <script type='text/javascript' src='scripts/xmlhttp.js'></script>
-<style>
-body{
-    background-image: url("https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Ffortunedotcom.files.wordpress.com%2F2018%2F07%2Fbarack-obama.jpg&f=1&nofb=1");
-}
-</style>
-
  
 
 <div class="wrapper">
