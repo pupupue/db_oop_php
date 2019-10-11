@@ -22,7 +22,7 @@ class Book extends Item
             'required' => true,
             'char' => true,
             'min' => 2,
-            'max' => 255
+            'max' => 20
         )
     );
 

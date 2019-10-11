@@ -15,7 +15,7 @@
             <a href="new.php" class="btn btn-danger">ADD</a>
         </div>
         <div class='col-md-2'>
-            <a href="resetdb.php" class="btn btn-danger" >RESET DB</a>
+            <a href="" class="btn btn-danger" >BUTTON</a>
         </div>
         <div class='col-md-3'>
         </div>
