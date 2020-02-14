@@ -1,8 +1,13 @@
 <!-- Footer -->
 <footer class="page-footer font-small blue pt-4">
-
+  
+  <div class="page-header"></div>
+  <div>
+    <h3 class="text-center">Navigation</h3>
+  </div>
   <!-- Footer Links -->
   <div class="container-fluid text-center text-md-left">
+
 
     <!-- Grid row -->
     <div class="row">

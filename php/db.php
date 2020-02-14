@@ -42,9 +42,3 @@ class Database
 
 $db = new Database();
 
-/* $conn = mysqli_connect('localhost', 'root', '', 'scandi');
-if (!$conn) {
-  die("database connection failed.");
-} else {
-  //echo "connected";
-} */

@@ -1,7 +1,7 @@
 <?php 
-/* And each product type would get its own class, >>>in it<<<,                  */
-/* there should be validation logic, save logic, get logic                      */
-/* and all properties should be assigned underclass rather the under function.  */
+/* Each Product (like book, furniture, ect) is extending an item class                         */
+/* All products have SKU, name, price, type. (item specific attributes are handled by subclass)*/
+/* OOP approach                                                                                */
 class Item 
 {
     protected static $db_table = "items";
@@ -39,8 +39,9 @@ class Item
     public $type_id;
 
     public $errors = array();
-    /* findAll() finds all items from db */
-    /* fills up that object with getById() method */
+
+    /* findAll() returns all items                              */
+    /* and returns objects with getById() method                */
     public static function findAll()
     {
         $sql = "SELECT * FROM ".static::$db_table;
@@ -48,19 +49,20 @@ class Item
         $objects = array();
         foreach($items as $item){
             $class = static::getItemTypeById($item->id);
+            # static class call (getById())
             $obj = $class::getById($item->id);
             $objects[] = $obj;
         }
         return $objects;
     }
-    /* Returns object by id */
+    /* Returns full object by id                                 */
     public static function getById($id)
     {
         $sql = "SELECT * FROM ".static::$db_table." WHERE id=$id LIMIT 1";
-        $result_array = static::findTheseQueries($sql);
+        $result_array = static::findThisItem($sql);
         return !empty($result_array) ? array_shift($result_array) : false;
     }
-    /* query for getting type */
+    /* query for getting type                                   */
     public static function getItemTypeById($id)
     {   
         global $db;
@@ -69,8 +71,8 @@ class Item
         $result = mysqli_fetch_array($result);
         return array_shift($result);
     }
-    /* findThisQuery($sql) finds query by sql code*/
-    /* used when getting data from one db_table */
+    /* findThisQuery($sql) finds query by sql code              */
+    /* used for getting data from one db_table                  */
     public static function findThisQuery($sql)
     {
         global $db;
@@ -82,11 +84,12 @@ class Item
             $object_array[] = static::instantiation($row);
         }
         return $object_array;
-    }
-    /* findTheseQueries($sql) modified findThisQuery*/
-    /* used for getting data from two db_tables */
-    /*     [items and furniture]    for example  */
-    public static function findTheseQueries($sql)
+    }  
+    /* findThisItem($sql)                                        */
+    /* input sql code for item                                   */
+    /* output full item object array (with special attributes)   */ 
+    /*     [items and furniture]    for example                  */
+    public static function findThisItem($sql)
     {
         global $db;
         $result_set = $db->query($sql);
@@ -95,20 +98,25 @@ class Item
         //fetch while loop
         $calling_class = get_called_class();
         $the_obj = new $calling_class;
+        // for each row
         while ($row = mysqli_fetch_array($result_set)) {
+            // for each attribute
             foreach ($row as $attribute => $value) {
                 if ($the_obj->hasAnAttribute($attribute)) {
                     $the_obj->$attribute = $value;
+                    // setup attribute values
                 }
             }
         }
-        //second database table query
+        // second database table query
+        // returns by type_id attribute values
         $the_obj = static::fillInAttributesFromDB($the_obj);
         $object_array[] = $the_obj;
         return $object_array;
     }
 
-    /* fillInAttributesFromDB($the_obj) */
+    /* fillInAttributesFromDB($the_obj)                                  */
+    /* input: uncomplete object, return: by type_id correct attr-values  */  
     public static function fillInAttributesFromDB($the_obj)
     {
         global $db;
@@ -124,7 +132,7 @@ class Item
         }
         return $the_obj;
     }
-    /* used to find query dynamically */
+    /* used to find query dynamically                                    */
     public static function instantiation($result)
     {
         $calling_class = get_called_class();
@@ -138,7 +146,7 @@ class Item
         }
         return $the_obj;
     }
-    /* checks class its called from if it has these attributes */
+    /* checks class its called from if it has these attributes           */
     private function hasAnAttribute($attribute)
     {
         $object_properties = get_object_vars($this);
@@ -147,8 +155,8 @@ class Item
         //then return true/false
     }
 
-    /* Using predefined DB fields in class */
-    /* returns properties dynamically */
+    /* Using predefined DB fields in class                                */
+    /* returns properties dynamically                                     */
     protected function properties($db_table_fields)
     {
         $properties = array();
@@ -160,7 +168,7 @@ class Item
         }
         return $properties;
     }
-    /* cleans properties() */
+    /* cleans properties()                                                 */
     protected function cleanProperties($db_table_fields)
     {
         global $db;
@@ -171,8 +179,9 @@ class Item
         return $clean_properties;
     }
 
-    /* save/delete/get all have to deal with 2 db tables */
-    /* save logic */
+    /* save/delete/get methods have to deal with 2 db tables               */
+    /* [items]&[furniture or book or movie ect.] */ 
+    /* save logic                                                          */
     public function save()
     {
         global $db;
@@ -199,7 +208,7 @@ class Item
         }
     }
 
-    /* delete logic */
+    /* delete logic                                                   */
     public function delete()
     {
         global $db;
@@ -213,7 +222,7 @@ class Item
         return (mysqli_affected_rows($db->conn) == 1) ? true : false;  
     }
 
-    /* Deletes every selected checkbox */
+    /* Deletes every selected checkbox                                */
     public function deleteProducts()
     {
         if (isset($_POST['submit'])) {
@@ -226,7 +235,7 @@ class Item
         }
     }
 
-    /* shows input fields and description dynamically */
+    /* shows input fields and description dynamically                  */
     public function getObjectTypes()
     {
         $result = "<div class='col-md-8'>";
@@ -250,9 +259,9 @@ class Item
     }
 
 
-    /*  */
-    /* ERROR HANDLING */
-    /*  */
+    /*                                                                  */
+    /* ERROR HANDLING                                                   */
+    /*                                                                  */
     public function validate($field, $value, $rules)
     {
     $value = trim($value);
@@ -305,7 +314,7 @@ class Item
             }
         }
     }
-    /* validates the defined item fields */
+    /* validates the defined item fields                                */
     public function validateAllItemFields()
     {
         global $db;
@@ -316,7 +325,7 @@ class Item
         }   
     }
 
-    /* validates the corresponding attribute fields */
+    /* validates the corresponding attribute fields                      */
     public function validateAllAttributeFields()
     {
         global $db;
@@ -326,7 +335,7 @@ class Item
         }   
     }
 
-    /* returns rule array for $value */
+    /* returns rule array for $value                                     */
     public function findRules($value, $rules_array)
     {
         //takes in value like pages and finds rules array()
@@ -337,25 +346,25 @@ class Item
         }
     }
 
-    /* adds error message to errors[] */
+    /* adds error message to errors[]                                    */
     private function addError($error)
     {
         $this->errors[] = $error;
     }
 
-    /* returns errors[] */
+    /* returns errors[]                                                  */
     public function errors()
     {
         return $this->errors;
     }
 
-    /* passed() is true when errors array is === empty array */
+    /* passed() is true when errors array is === empty array             */
     public function passed()
     {
         return $this->errors === array();
     }
 
-    /* gets $_POST variables dynamically and returns errors */
+    /* gets $_POST variables dynamically and returns errors              */
     public function getAndTestItemFields()
     {
         foreach (static::$db_table_fields as $key => $value) {
@@ -367,10 +376,10 @@ class Item
         return $this->errors();
     }
 
-    /* works the same way as getAndTestItemFields()*/
-    /* we need to check items side first because */
-    /* new Class in new.php is created dynamically from the form */
-    /* and again we have 2 DB tables */
+    /* works the same way as getAndTestItemFields()                      */
+    /* we need to check items side first because                         */
+    /* new Class in new.php is created dynamically from the form         */
+    /* and again we have 2 DB tables                                     */
     public function getAndTestAttributeFields()
     {
         $this->getAndTestItemFields();

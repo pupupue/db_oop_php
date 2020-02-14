@@ -3,4 +3,4 @@
 define("DB_HOST","localhost");
 define("DB_USER","root");
 define("DB_PASS","");
-define("DB_NAME","123scandi321");
+define("DB_NAME","db_oop_php");
