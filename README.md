@@ -3,7 +3,7 @@ Created on Windows enviroment using WAMP
 
 - To setup application import the .sql file in database
 - To run application go to ../db_oop_php/
-- Focus on PHP OOP, not on design
+- Focus in this test is on PHP OOP, not so much on web design
 
 Task description:
 
